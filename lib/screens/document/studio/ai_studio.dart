@@ -19,9 +19,16 @@ final List<FeatureDisplay> _features = <FeatureDisplay>[
 ];
 
 /// Contains the visual aspect of the AI Studio
-class AiStudio extends StatelessWidget {
+class AiStudio extends StatefulWidget {
   /// Creates a [AiStudio]
   const AiStudio({super.key});
+
+  @override
+  State<AiStudio> createState() => _AiStudioState();
+}
+
+class _AiStudioState extends State<AiStudio> {
+  int _selectedSectionIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +36,27 @@ class AiStudio extends StatelessWidget {
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _features
-              .map<Widget>(
-                (FeatureDisplay feature) => Padding(
-                  padding: const EdgeInsets.only(
-                    right: 18,
-                  ),
-                  child: FeatureCard(
-                    icon: feature.icon,
-                    title: feature.title,
-                    width: 150,
-                    height: 150,
-                  ),
-                ),
-              )
-              .toList(),
+          children: _features.map<Widget>((FeatureDisplay feature) {
+            final int sectionIndex = _features.indexOf(feature);
+
+            return Padding(
+              padding: const EdgeInsets.only(
+                right: 18,
+              ),
+              child: FeatureCard(
+                onPressed: () {
+                  setState(() {
+                    _selectedSectionIndex = sectionIndex;
+                  });
+                },
+                icon: feature.icon,
+                title: feature.title,
+                width: 150,
+                height: 150,
+                isSelected: _selectedSectionIndex == sectionIndex,
+              ),
+            );
+          }).toList(),
         ),
       ],
     );

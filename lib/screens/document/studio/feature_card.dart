@@ -10,6 +10,8 @@ class FeatureCard extends StatelessWidget {
     required this.title,
     required this.width,
     required this.height,
+    required this.isSelected,
+    this.onPressed,
     super.key,
   });
 
@@ -25,43 +27,52 @@ class FeatureCard extends StatelessWidget {
   /// Contains the height of the card
   final double? height;
 
+  /// To check if the card is selected
+  final bool isSelected;
+
+  /// Contains the function to execute when the card is pressed
+  final VoidCallback? onPressed;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          const Spacer(),
-          SvgPicture.asset(
-            icon,
-            width: 48,
-            height: 48,
-          ),
-          // const SizedBox(height: 8),
-          const Spacer(),
-          Text(
-            title,
-            style: GoogleFonts.lato(
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-              fontSize: 14,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: width,
+        height: height,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: isSelected ? Colors.blue.withOpacity(0.5) : Colors.black12,
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-          ),
-        ],
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            const Spacer(),
+            SvgPicture.asset(
+              icon,
+              width: 48,
+              height: 48,
+            ),
+            // const SizedBox(height: 8),
+            const Spacer(),
+            Text(
+              title,
+              style: GoogleFonts.lato(
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

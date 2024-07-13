@@ -10,7 +10,6 @@ A simple and collaborative editor that uses AI to enhance and make your research
 - A user can summarize a long text using AI and add the result inside the document
 - A user can modify the style of the text document using a simple editor
 - A user can generate an image using a AI and add the image to the document
-- A user can choose a subscription and the fee by stripe (There is two subscription basic and pro)
 - A user can upload a profile picture
 
 ## Technologies
