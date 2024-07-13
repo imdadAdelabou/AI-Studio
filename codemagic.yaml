@@ -1,0 +1,178 @@
+workflows:
+  web-workflow:
+    name: Web Workflow
+    environment:
+      groups:
+        - firebase_credentials
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: master
+          include: true
+      cancel_previous_builds: false
+    scripts:
+      - name: Upgrade flutter
+        script: |
+          flutter upgrade
+
+      - name: Install dependencies
+        script: |
+          flutter pub get
+
+      - name: Flutter analyze
+        script: |
+          dart analyze
+
+      - name: Flutter test
+        script: |
+          flutter test
+
+      - name: Write Google credentials
+        script: |
+          echo "$FIREBASE_SERVICE_ACCOUNT" > "$GOOGLE_APPLICATION_CREDENTIALS"
+          
+      - name: Build for web
+        script: | 
+          flutter build web --release
+          cd build/web
+          7z a -r ../web.zip ./*
+
+      - name: Publish to Firebase Hosting
+        script: | 
+          firebase deploy
+
+  android-workflow:
+    name: Android Workflow
+    environment:
+      flutter: stable
+      java: 17
+      groups:
+        - firebase_credentials
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: master
+          include: true
+      cancel_previous_builds: false
+    scripts:
+      - name: Java version
+        script: |
+          java -version
+      
+      - name: Upgrade flutter
+        script: |
+          flutter upgrade
+
+      - name: Install dependencies
+        script: |
+          flutter pub get
+
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+
+      - name: Flutter test
+        script: |
+          flutter test
+
+      - name: Write Google credentials
+        script: | 
+          echo "$FIREBASE_SERVICE_ACCOUNT" > "$GOOGLE_APPLICATION_CREDENTIALS"
+
+      - name: Build APK
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+          flutter packages pub get
+          flutter build apk --release
+
+      - name: Distribute app to firebase with gradle plugin
+        script: | 
+          cd android && ./gradlew appDistributionUploadRelease
+
+    artifacts:
+      - build/web.zip
+      - flutter_drive.log
+
+  ios-workflow:
+    name: iOS Workflow
+    environment:
+      flutter: stable
+      java: 17
+      groups:
+        - firebase_credentials
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: master
+          include: true
+      cancel_previous_builds: false
+    scripts:
+      - name: Update CocoaPods
+        script: |
+          gem install cocoapods
+
+      - name: Install dependencies
+        script: |
+          flutter pub get
+
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+
+      - name: Flutter test
+        script: |
+          flutter test
+
+      - name: Write Google credentials
+        script: | 
+          echo "$FIREBASE_SERVICE_ACCOUNT" > "$GOOGLE_APPLICATION_CREDENTIALS"
+
+      - name: Build iOS
+        script: |
+          flutter build ios --release --no-codesign
+      
+      - name: Install Fastlane
+        script: |
+          gem install fastlane -NV
+      - name: Execute Fastlane Lane
+        script: |
+          fastlane deploy_debug
+
+      
+
+    publishing:
+      firebase:
+        firebase_service_account: $FIREBASE_SERVICE_ACCOUNT
+
+        android:
+          app_id: 1:909204974606:android:340480fd4f6473a5d3605f
+          groups:
+            - androidTesters
+          artifact_type: 'apk'
+
+        ios:
+          app_id: 1:909204974606:ios:7a72ef7ee06fae7dd3605f
+          groups:
+            - androidTesters
+      
+      email:
+        recipients:
+          - imdadadelabou0@gmail.com
+          - hamidtessilimi@gmail.com
+
+  
+
+    environment:
+      flutter: stable
+      java: 17
+      groups:
+        - firebase_credentials
+
+          
+

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "909204974606",
+    "project_id": "docs-ai-192fb",
+    "storage_bucket": "docs-ai-192fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909204974606:android:340480fd4f6473a5d3605f",
+        "android_client_info": {
+          "package_name": "com.docsai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc---6d5K5WY5BPQ6BWf70T1gW8EicpCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

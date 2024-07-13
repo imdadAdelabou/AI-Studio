@@ -1,0 +1,70 @@
+name: docs_ai
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.2.5 <4.0.0'
+
+dependencies:
+  auto_size_text: ^3.0.0
+  cached_network_image: ^3.3.1
+  dio: ^5.4.1
+  file_picker: ^8.0.0+1
+  firebase_core: ^2.31.0
+  firebase_crashlytics: ^3.5.5
+  firebase_storage: ^11.7.5
+  flutter:
+    sdk: flutter
+  flutter_quill: ^9.3.1
+  flutter_quill_extensions: ^9.3.11
+  flutter_riverpod: ^2.5.1
+  flutter_stripe: ^10.1.1
+  flutter_stripe_web: ^5.1.0
+  flutter_svg: ^2.0.10+1
+  font_awesome_flutter: ^10.7.0
+  form_field_validator: ^1.1.0
+  gap: ^3.0.1
+  google_fonts: ^6.2.1
+  google_sign_in: ^6.2.1
+  image_picker: ^1.0.7
+  intl: ^0.18.1
+  json_annotation: ^4.9.0
+  routemaster: ^1.0.1
+  screenshot: ^2.3.0
+  shared_preferences: ^2.2.2
+  socket_io_client: ^2.0.3+1
+  
+dependency_overrides:
+  flutter_colorpicker:
+    git:
+      url: https://github.com/mchome/flutter_colorpicker
+      ref: master
+  intl: 0.18.1
+
+dev_dependencies:
+  blackfoot_flutter_lint: ^2.0.0
+  build_runner: ^2.4.9
+  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  json_serializable: ^6.7.1
+  patrol: ^3.5.2
+  test: ^1.24.9
+  
+  
+
+patrol:
+  app_name: docs.ai
+  android:
+    package_name: com.docsai.app
+  ios:
+    bundle_id: com.docsai.app
+  
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/imgs/
