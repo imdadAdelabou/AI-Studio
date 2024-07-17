@@ -193,7 +193,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       _showAIFeatureDialog(
         context: context,
         dialogTitle: dialogTitle,
-        child: AiStudio(),
+        child: const AiStudio(),
       ),
     );
   }

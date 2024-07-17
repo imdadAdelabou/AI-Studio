@@ -3,6 +3,7 @@ import 'package:docs_ai/screens/document/studio/model/ai_model.dart';
 import 'package:docs_ai/screens/document/studio/model/feature_display.dart';
 import 'package:docs_ai/utils/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 final List<FeatureDisplay> _features = <FeatureDisplay>[
   FeatureDisplay(
@@ -61,9 +62,20 @@ class AiStudio extends StatefulWidget {
 class _AiStudioState extends State<AiStudio> {
   int _selectedSectionIndex = 0;
 
+  late AiModel _currentSelectedModel;
+  late List<AiModel> _currentModelsSelected;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentModelsSelected = _features.first.models;
+    _currentSelectedModel = _currentModelsSelected.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -78,6 +90,8 @@ class _AiStudioState extends State<AiStudio> {
                 onPressed: () {
                   setState(() {
                     _selectedSectionIndex = sectionIndex;
+                    _currentModelsSelected = feature.models;
+                    _currentSelectedModel = feature.models.first;
                   });
                 },
                 icon: feature.icon,
@@ -88,6 +102,32 @@ class _AiStudioState extends State<AiStudio> {
               ),
             );
           }).toList(),
+        ),
+        const Gap(30),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: _currentModelsSelected
+              .map(
+                (AiModel model) => Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Radio<AiModel>(
+                        value: model,
+                        groupValue: _currentSelectedModel,
+                        onChanged: (AiModel? value) {
+                          setState(() {
+                            _currentSelectedModel = value!;
+                          });
+                        },
+                      ),
+                      Text(model.title),
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
         ),
       ],
     );
