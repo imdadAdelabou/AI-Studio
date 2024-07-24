@@ -7,6 +7,7 @@ class FeatureDisplay {
     required this.title,
     required this.icon,
     required this.models,
+    required this.type,
   });
 
   /// Contains the title of the feature
@@ -17,4 +18,7 @@ class FeatureDisplay {
 
   /// Contains the models of the feature
   final List<AiModel> models;
+
+  /// Contains the type of the feature
+  final String type;
 }

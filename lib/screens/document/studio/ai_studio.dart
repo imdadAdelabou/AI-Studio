@@ -1,8 +1,10 @@
 import 'package:docs_ai/screens/document/studio/feature_card.dart';
 import 'package:docs_ai/screens/document/studio/model/ai_model.dart';
 import 'package:docs_ai/screens/document/studio/model/feature_display.dart';
+import 'package:docs_ai/screens/document/widgets/summarize_text.dart';
 import 'package:docs_ai/utils/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:gap/gap.dart';
 
 final List<FeatureDisplay> _features = <FeatureDisplay>[
@@ -19,6 +21,7 @@ final List<FeatureDisplay> _features = <FeatureDisplay>[
         key: 'falconsai-text_summarization',
       ),
     ],
+    type: 'text',
   ),
   FeatureDisplay(
     title: 'Generate Image',
@@ -33,6 +36,7 @@ final List<FeatureDisplay> _features = <FeatureDisplay>[
         key: 'runwayml',
       ),
     ],
+    type: 'image',
   ),
   FeatureDisplay(
     title: 'Ask AI',
@@ -47,6 +51,7 @@ final List<FeatureDisplay> _features = <FeatureDisplay>[
         key: 'gemini',
       ),
     ],
+    type: 'text',
   ),
 ];
 
@@ -128,6 +133,12 @@ class _AiStudioState extends State<AiStudio> {
                 ),
               )
               .toList(),
+        ),
+        Visibility(
+          visible: _features[_selectedSectionIndex].type == 'text',
+          child: SummarizeText(
+            controller: QuillController.basic(),
+          ),
         ),
       ],
     );
