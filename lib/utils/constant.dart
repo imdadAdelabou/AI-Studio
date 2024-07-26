@@ -11,8 +11,11 @@ enum TextFormFieldType {
   password
 }
 
+// /// Contains the base url of the api
+// const String baseApiUrl = 'https://docsai-0273dc8c6d35.herokuapp.com';
+
 /// Contains the base url of the api
-const String baseApiUrl = 'https://docsai-0273dc8c6d35.herokuapp.com';
+const String baseApiUrl = 'http://localhost:3001';
 
 /// Contains the stripe publishable key
 const String kStripePublishableKey =
@@ -20,9 +23,6 @@ const String kStripePublishableKey =
 
 /// Contains the base url of the api
 const String apiHost = '$baseApiUrl/api';
-
-// 172.20.10.2
-// 192.168.1.23:3001
 
 /// Contains the base url of the api
 const String apiHostWs = baseApiUrl;

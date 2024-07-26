@@ -8,14 +8,12 @@ import 'package:docs_ai/repository/socket_repository.dart';
 import 'package:docs_ai/screens/document/studio/ai_studio.dart';
 import 'package:docs_ai/screens/document/widgets/document_screen_app_bar.dart';
 import 'package:docs_ai/screens/document/widgets/gen_ai_image.dart';
-import 'package:docs_ai/screens/document/widgets/summarize_text.dart';
 import 'package:docs_ai/utils/app_text.dart';
 import 'package:docs_ai/utils/colors.dart';
 import 'package:docs_ai/widgets/close_dialog_icon.dart';
 import 'package:docs_ai/widgets/custom_snack_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
@@ -27,7 +25,6 @@ class _FloatingAIActionButton extends StatelessWidget {
   const _FloatingAIActionButton({
     required this.icon,
     required this.onPressed,
-    super.key,
   });
 
   final IconData icon;
@@ -172,18 +169,18 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     );
   }
 
-  void _showSummaryDialog({
-    required BuildContext context,
-    required String dialogTitle,
-  }) {
-    unawaited(
-      _showAIFeatureDialog(
-        context: context,
-        dialogTitle: 'Summarize a text using AI',
-        child: SummarizeText(controller: _controller),
-      ),
-    );
-  }
+  // void _showSummaryDialog({
+  //   required BuildContext context,
+  //   required String dialogTitle,
+  // }) {
+  //   unawaited(
+  //     _showAIFeatureDialog(
+  //       context: context,
+  //       dialogTitle: 'Summarize a text using AI',
+  //       child: SummarizeText(controller: _controller),
+  //     ),
+  //   );
+  // }
 
   void _showEngineStudio({
     required BuildContext context,
@@ -193,7 +190,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       _showAIFeatureDialog(
         context: context,
         dialogTitle: dialogTitle,
-        child: const AiStudio(),
+        child: AiStudio(
+          controller: _controller,
+        ),
       ),
     );
   }
@@ -270,27 +269,6 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             onPressed: () => _showEngineStudio(
               context: context,
               dialogTitle: AppText.aiStudio,
-            ),
-          ),
-          _FloatingAIActionButton(
-            icon: Icons.summarize,
-            onPressed: () => _showSummaryDialog(
-              context: context,
-              dialogTitle: 'Summarize a text using AI',
-            ),
-          ),
-          Visibility(
-            visible: ref.watch(userProvider)!.pricing!.label == 'Pro',
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: _FloatingAIActionButton(
-                key: const Key('gen_image_ai_button'),
-                icon: Icons.image,
-                onPressed: () => _showGenAiImageDialog(
-                  context: context,
-                  dialogTitle: 'Generate an image using AI',
-                ),
-              ),
             ),
           ),
           const Gap(8),

@@ -16,11 +16,14 @@ class SummarizeText extends ConsumerStatefulWidget {
   /// Creates a [SummarizeText] widget
   const SummarizeText({
     required this.controller,
+    required this.ctaTitle,
     super.key,
   });
 
   /// Contains the controller of the Quill editor
   final QuillController controller;
+
+  final String ctaTitle;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SummarizeTextState();
@@ -88,7 +91,7 @@ class _SummarizeTextState extends ConsumerState<SummarizeText> {
           const Gap(20),
           CustomBtn(
             isLoading: _isLoading,
-            label: AppText.summarize,
+            label: widget.ctaTitle,
             onPressed: _summarizeText,
           ),
           const Gap(20),

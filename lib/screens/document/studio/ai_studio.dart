@@ -1,8 +1,10 @@
 import 'package:docs_ai/screens/document/studio/feature_card.dart';
 import 'package:docs_ai/screens/document/studio/model/ai_model.dart';
 import 'package:docs_ai/screens/document/studio/model/feature_display.dart';
+import 'package:docs_ai/screens/document/widgets/gen_ai_image.dart';
 import 'package:docs_ai/screens/document/widgets/summarize_text.dart';
 import 'package:docs_ai/utils/app_assets.dart';
+import 'package:docs_ai/utils/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:gap/gap.dart';
@@ -51,14 +53,19 @@ final List<FeatureDisplay> _features = <FeatureDisplay>[
         key: 'gemini',
       ),
     ],
-    type: 'text',
+    type: 'ask',
   ),
 ];
 
 /// Contains the visual aspect of the AI Studio
 class AiStudio extends StatefulWidget {
   /// Creates a [AiStudio]
-  const AiStudio({super.key});
+  const AiStudio({
+    super.key,
+    required this.controller,
+  });
+
+  final QuillController controller;
 
   @override
   State<AiStudio> createState() => _AiStudioState();
@@ -134,10 +141,25 @@ class _AiStudioState extends State<AiStudio> {
               )
               .toList(),
         ),
+        const Gap(30),
         Visibility(
           visible: _features[_selectedSectionIndex].type == 'text',
           child: SummarizeText(
-            controller: QuillController.basic(),
+            controller: widget.controller,
+            ctaTitle: AppText.summarize,
+          ),
+        ),
+        Visibility(
+          visible: _features[_selectedSectionIndex].type == 'image',
+          child: GenAiImage(
+            controller: widget.controller,
+          ),
+        ),
+        Visibility(
+          visible: _features[_selectedSectionIndex].type == 'ask',
+          child: SummarizeText(
+            controller: widget.controller,
+            ctaTitle: 'Ask',
           ),
         ),
       ],
