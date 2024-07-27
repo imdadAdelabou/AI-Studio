@@ -5,8 +5,10 @@ import 'package:docs_ai/screens/document/widgets/gen_ai_image.dart';
 import 'package:docs_ai/screens/document/widgets/summarize_text.dart';
 import 'package:docs_ai/utils/app_assets.dart';
 import 'package:docs_ai/utils/app_text.dart';
+import 'package:docs_ai/viewModels/ai_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 final List<FeatureDisplay> _features = <FeatureDisplay>[
@@ -147,6 +149,7 @@ class _AiStudioState extends State<AiStudio> {
           child: SummarizeText(
             controller: widget.controller,
             ctaTitle: AppText.summarize,
+            aiAction: SummarizeAction(),
           ),
         ),
         Visibility(
@@ -160,9 +163,41 @@ class _AiStudioState extends State<AiStudio> {
           child: SummarizeText(
             controller: widget.controller,
             ctaTitle: 'Ask',
+            aiAction: AskAiAction(
+              type: 'chatgpt',
+            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The implementation of the AI action to call the summarize method
+class SummarizeAction implements IAiAction {
+  @override
+  Future<String?> action(WidgetRef ref, String text) async {
+    return AIViewModel().summarize(
+      ref: ref,
+      text: text,
+    );
+  }
+}
+
+/// The implementation of the AI action to call the askAi method
+class AskAiAction implements IAiAction {
+  /// Creates a [AskAiAction] instance
+  AskAiAction({required this.type});
+
+  /// Contains the type of AI
+  final String type;
+
+  @override
+  Future<String?> action(WidgetRef ref, String text) async {
+    return AIViewModel().askAi(
+      ref: ref,
+      text: text,
+      type: type,
     );
   }
 }

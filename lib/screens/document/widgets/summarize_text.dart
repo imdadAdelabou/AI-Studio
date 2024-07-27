@@ -1,5 +1,4 @@
 import 'package:docs_ai/utils/app_text.dart';
-import 'package:docs_ai/viewModels/ai_viewmodel.dart';
 import 'package:docs_ai/widgets/custom_btn.dart';
 import 'package:docs_ai/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -11,19 +10,30 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Represents the action to perform depends on the type of AI
+abstract class IAiAction {
+  /// Contains the action to perform
+  Future<String?> action(WidgetRef ref, String text);
+}
+
 /// A widget that summarize the text
 class SummarizeText extends ConsumerStatefulWidget {
   /// Creates a [SummarizeText] widget
   const SummarizeText({
     required this.controller,
     required this.ctaTitle,
+    required this.aiAction,
     super.key,
   });
 
   /// Contains the controller of the Quill editor
   final QuillController controller;
 
+  /// Contains the title to display on the cta btn
   final String ctaTitle;
+
+  /// Contains the action to perform
+  final IAiAction aiAction;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SummarizeTextState();
@@ -41,10 +51,11 @@ class _SummarizeTextState extends ConsumerState<SummarizeText> {
       setState(() {
         _isLoading = true;
       });
-      final String? result = await AIViewModel().summarize(
-        ref: ref,
-        text: _textController.text,
+      final String? result = await widget.aiAction.action(
+        ref,
+        _textController.text,
       );
+
       setState(() {
         _isLoading = false;
         _summarizeTextResult = result ?? '';

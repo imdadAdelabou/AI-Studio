@@ -14,6 +14,19 @@ class AIViewModel {
     return result.data;
   }
 
+  /// Ask the AI
+  Future<String?> askAi({
+    required WidgetRef ref,
+    required String text,
+    required String type,
+  }) async {
+    final ErrorModel result = await ref.read(aiRepositoryProvider).askAi(
+          text: text,
+          model: type,
+        );
+    return result.data;
+  }
+
   /// Generate an AI image
   Future<List<String>> genAiImage({
     required WidgetRef ref,

@@ -47,6 +47,36 @@ class AIRepository {
     }
   }
 
+  /// The method to call when a user wants to ask a question to the ai models.
+  Future<ErrorModel> askAi({
+    required String text,
+    required String model,
+  }) async {
+    try {
+      final Response<dynamic> response = await _dioClient.post(
+        '/ai/$model/ask_ai',
+        data: <String, dynamic>{
+          'text': text,
+        },
+      );
+      if (response.statusCode == 200) {
+        return ErrorModel(
+          data: (response.data as Map<String, dynamic>)['data'] as String,
+        );
+      }
+
+      return const ErrorModel(
+        data: null,
+        error: AppText.errorHappened,
+      );
+    } on DioException catch (e) {
+      return ErrorModel(
+        error: e.response!.statusMessage,
+        data: null,
+      );
+    }
+  }
+
   /// Generate an image using the prompt
   Future<ErrorModel> generateAImage(String prompt) async {
     try {
