@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:docs_ai/utils/app_text.dart';
 import 'package:docs_ai/viewModels/ai_viewmodel.dart';
 import 'package:docs_ai/widgets/custom_btn.dart';
@@ -8,6 +9,91 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
+
+class _GenAIImageDisplayContainer extends StatelessWidget {
+  const _GenAIImageDisplayContainer({
+    required this.width,
+    required this.height,
+    required this.child,
+  });
+
+  final double width;
+  final double height;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: child,
+    );
+  }
+}
+
+class _GenAIImageDisplayLoader extends StatelessWidget {
+  const _GenAIImageDisplayLoader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: const _GenAIImageDisplayContainer(
+        width: 200,
+        height: 200,
+        child: null,
+      ),
+    );
+  }
+}
+
+class _ShowGenAIImage extends StatelessWidget {
+  const _ShowGenAIImage({required this.url});
+
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      httpHeaders: const <String, String>{
+        'mode': 'no-cors',
+      },
+      imageUrl: url,
+      fit: BoxFit.cover,
+      placeholder: (BuildContext context, String url) {
+        return const _GenAIImageDisplayLoader();
+      },
+      imageBuilder: (_, ImageProvider imageProvider) {
+        return _GenAIImageDisplayContainer(
+          width: 200,
+          height: 200,
+          child: Image(
+            image: imageProvider,
+            fit: BoxFit.cover,
+          ),
+        );
+      },
+      errorWidget: (BuildContext context, String url, dynamic error) {
+        return const _GenAIImageDisplayContainer(
+          width: 200,
+          height: 200,
+          child: Center(
+            child: Icon(
+              Icons.error,
+              color: Colors.red,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
 
 /// Contains the visual aspect of the AI image generation
 class GenAiImage extends ConsumerStatefulWidget {
@@ -41,6 +127,7 @@ class _GenAiImageState extends ConsumerState<GenAiImage> {
       ref: ref,
       prompt: _promptController.text,
     );
+    print(result);
     setState(() {
       _isLoading = false;
       if (result.isNotEmpty) {
@@ -83,7 +170,7 @@ class _GenAiImageState extends ConsumerState<GenAiImage> {
           const Gap(20),
           if (_isLoading)
             const Center(
-              child: CircularProgressIndicator(),
+              child: _GenAIImageDisplayLoader(),
             ),
           Visibility(
             visible: _urlImage.isNotEmpty && !_isLoading,
@@ -102,10 +189,8 @@ class _GenAiImageState extends ConsumerState<GenAiImage> {
                   children: _urlImage
                       .map<Widget>(
                         (String e) => Expanded(
-                          child: Image.network(
-                            e,
-                            height: 100,
-                            fit: BoxFit.fitHeight,
+                          child: _ShowGenAIImage(
+                            url: e,
                           ),
                         ),
                       )
